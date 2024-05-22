@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { VirtualizedList } from "../compononets/dashboard-components/VirtualizedList";
 import { useUser } from "@clerk/nextjs";
 
-const getData = async (address) => {
+const getData = async (address: string) => {
     const apiKey = process.env.NEXT_PUBLIC_ES_KEY
 
     if (!apiKey) {
@@ -62,7 +62,8 @@ export default function Dashboard() {
         }
     }, [user]);
 
-    const handleButtonClick = (address) => {
+    const handleButtonClick = (address: string | undefined) => {
+        if (address === undefined) return
         setSelectedAddress(address);
     };
 
