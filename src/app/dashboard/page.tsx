@@ -86,11 +86,11 @@ export default function Dashboard() {
             </div>
             <div className="flex flex-col gap-5">
                 {isLoading ? (
-                    <div className="text-white">Loading...</div>
+                    <div className="text-white p-5 m-5">Loading...</div>
                 ) : list.length > 0 ? (
                     <VirtualizedList list={list} />
                 ) : (
-                    <div className="text-white p-5 m-5">No transactions were found</div>
+                    <div className="text-white p-5 m-5">No transactions were found for {selectedAddress}</div>
                 )}
             </div>
         </div>
