@@ -1,143 +1,98 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
+"use client";
+import { useEffect, useState } from "react";
 import { VirtualizedList } from "../compononets/dashboard-components/VirtualizedList";
+import { useUser } from "@clerk/nextjs";
 
-const getData = async () => {
-    const apiKey = process.env.etherscanKey;
+const getData = async (address) => {
+    const apiKey = process.env.NEXT_PUBLIC_ES_KEY
 
-    const addresses = [
-        '0xa83114A443dA1CecEFC50368531cACE9F37fCCcb',
-    ];
-console.log(apiKey)
+    if (!apiKey) {
+        throw new Error("Etherscan API key is not defined");
+    }
+
     const url = `https://api.etherscan.io/api`
         + `?module=account`
         + `&action=txlist`
-        + `&address=${addresses.join(',')}`
-        + `&tag=latest`
-        + `&page=1`
-        + `&sort=ascapikey=${apiKey}`;
-    const res = await fetch(url, { cache: "no-store" })
-    return res.json()
-}
+        + `&address=${address}`
+        + `&startblock=0`
+        + `&endblock=99999999`
+        + `&sort=asc`
+        + `&apikey=${apiKey}`;
 
-export default async function Dashboard() {
-    const response = await getData()
-    const user = await currentUser()
-    const list = response.result
-    console.log(response)
-    // const list = [
-    //     {
-    //         blockNumber: '18971034',
-    //         timeStamp: '1704823007',
-    //         hash: '0x0261b59ef5ffae43e73398eda68b926927b686320db430cd5342bc8b5d5fef60',
-    //         nonce: '2',
-    //         blockHash: '0xbb09f418604e5dfae4020f3fb38a3d081f93ddc6bd71a0105fcb8435835991ee',
-    //         transactionIndex: '161',
-    //         from: '0xa83114a443da1cecefc50368531cace9f37fcccb',
-    //         to: '0xa8c62111e4652b07110a0fc81816303c42632f64',
-    //         value: '27278630897672930',
-    //         gas: '21000',
-    //         gasPrice: '22139128176',
-    //         isError: '0',
-    //         txreceipt_status: '1',
-    //         input: '0x',
-    //         contractAddress: '',
-    //         cumulativeGasUsed: '14607928',
-    //         gasUsed: '21000',
-    //         confirmations: '953271',
-    //         methodId: '0x',
-    //         functionName: ''
-    //     }, {
-    //         blockNumber: '18971034',
-    //         timeStamp: '1704823007',
-    //         hash: '0x0261b59ef5ffae43e73398eda68b926927b686320db430cd5342bc8b5d5fef60',
-    //         nonce: '2',
-    //         blockHash: '0xbb09f418604e5dfae4020f3fb38a3d081f93ddc6bd71a0105fcb8435835991ee',
-    //         transactionIndex: '161',
-    //         from: '0xa83114a443da1cecefc50368531cace9f37fcccb',
-    //         to: '0xa8c62111e4652b07110a0fc81816303c42632f64',
-    //         value: '27278630897672930',
-    //         gas: '21000',
-    //         gasPrice: '22139128176',
-    //         isError: '0',
-    //         txreceipt_status: '1',
-    //         input: '0x',
-    //         contractAddress: '',
-    //         cumulativeGasUsed: '14607928',
-    //         gasUsed: '21000',
-    //         confirmations: '953271',
-    //         methodId: '0x',
-    //         functionName: ''
-    //     }, {
-    //         blockNumber: '18971034',
-    //         timeStamp: '1704823007',
-    //         hash: '0x0261b59ef5ffae43e73398eda68b926927b686320db430cd5342bc8b5d5fef60',
-    //         nonce: '2',
-    //         blockHash: '0xbb09f418604e5dfae4020f3fb38a3d081f93ddc6bd71a0105fcb8435835991ee',
-    //         transactionIndex: '161',
-    //         from: '0xa83114a443da1cecefc50368531cace9f37fcccb',
-    //         to: '0xa8c62111e4652b07110a0fc81816303c42632f64',
-    //         value: '27278630897672930',
-    //         gas: '21000',
-    //         gasPrice: '22139128176',
-    //         isError: '0',
-    //         txreceipt_status: '1',
-    //         input: '0x',
-    //         contractAddress: '',
-    //         cumulativeGasUsed: '14607928',
-    //         gasUsed: '21000',
-    //         confirmations: '953271',
-    //         methodId: '0x',
-    //         functionName: ''
-    //     }, {
-    //         blockNumber: '18971034',
-    //         timeStamp: '1704823007',
-    //         hash: '0x0261b59ef5ffae43e73398eda68b926927b686320db430cd5342bc8b5d5fef60',
-    //         nonce: '2',
-    //         blockHash: '0xbb09f418604e5dfae4020f3fb38a3d081f93ddc6bd71a0105fcb8435835991ee',
-    //         transactionIndex: '161',
-    //         from: '0xa83114a443da1cecefc50368531cace9f37fcccb',
-    //         to: '0xa8c62111e4652b07110a0fc81816303c42632f64',
-    //         value: '27278630897672930',
-    //         gas: '21000',
-    //         gasPrice: '22139128176',
-    //         isError: '0',
-    //         txreceipt_status: '1',
-    //         input: '0x',
-    //         contractAddress: '',
-    //         cumulativeGasUsed: '14607928',
-    //         gasUsed: '21000',
-    //         confirmations: '953271',
-    //         methodId: '0x',
-    //         functionName: ''
-    //     }, {
-    //         blockNumber: '18971034',
-    //         timeStamp: '1704823007',
-    //         hash: '0x0261b59ef5ffae43e73398eda68b926927b686320db430cd5342bc8b5d5fef60',
-    //         nonce: '2',
-    //         blockHash: '0xbb09f418604e5dfae4020f3fb38a3d081f93ddc6bd71a0105fcb8435835991ee',
-    //         transactionIndex: '161',
-    //         from: '0xa83114a443da1cecefc50368531cace9f37fcccb',
-    //         to: '0xa8c62111e4652b07110a0fc81816303c42632f64',
-    //         value: '27278630897672930',
-    //         gas: '21000',
-    //         gasPrice: '22139128176',
-    //         isError: '0',
-    //         txreceipt_status: '1',
-    //         input: '0x',
-    //         contractAddress: '',
-    //         cumulativeGasUsed: '14607928',
-    //         gasUsed: '21000',
-    //         confirmations: '953271',
-    //         methodId: '0x',
-    //         functionName: ''
-    //     },
-    // ]
+    try {
+        const res = await fetch(url, { cache: "no-store" });
+        const data = await res.json();
+
+        if (data.status === "1") {
+            return data.result;
+        } else {
+            throw new Error(data.message || "Failed to fetch transactions");
+        }
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        return [];
+    }
+};
+
+export default function Dashboard() {
+    const defaultAddress = '0xa83114A443dA1CecEFC50368531cACE9F37fCCcb';
+    const [selectedAddress, setSelectedAddress] = useState(defaultAddress);
+    const [list, setList] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const { user } = useUser();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (selectedAddress) {
+                setIsLoading(true);
+                const response = await getData(selectedAddress);
+                setList(response);
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [selectedAddress]);
+
+    useEffect(() => {
+        if (user?.web3Wallets?.[0]?.web3Wallet) {
+            setSelectedAddress(user.web3Wallets[0].web3Wallet);
+        } else {
+            setSelectedAddress(defaultAddress);
+        }
+    }, [user]);
+
+    const handleButtonClick = (address) => {
+        setSelectedAddress(address);
+    };
+
     return (
         <div className="flex flex-col bg-gradient-to-r from-slate-900 to-slate-700 min-h-screen">
-            <h1 className="text-2xl m-5 p-5 text-white"> welcome to web3 tracker</h1>
+            <h1 className="text-2xl m-5 p-5 text-white">Welcome to Web3 Tracker</h1>
+            <div className="flex gap-5 m-5 p-5">
+                <button
+                    onClick={() => handleButtonClick(user?.web3Wallets?.[0]?.web3Wallet)}
+                    className={`p-2 rounded ${selectedAddress === (user?.web3Wallets?.[0]?.web3Wallet) ? 'bg-blue-500' : 'bg-gray-500'}`}
+                >
+                    User Wallet
+                </button>
+                <button
+                    onClick={() => handleButtonClick(defaultAddress)}
+                    className={`p-2 rounded ${selectedAddress === defaultAddress ? 'bg-blue-500' : 'bg-gray-500'}`}
+                >
+                    Default Address
+                </button>
+            </div>
             <div className="flex flex-col gap-5">
-                <VirtualizedList list={list} />
+                {isLoading ? (
+                    <div className="text-white">Loading...</div>
+                ) : list.length > 0 ? (
+                    <VirtualizedList list={list} />
+                ) : (
+                    <div className="text-white p-5 m-5">No transactions were found</div>
+                )}
             </div>
         </div>
     );
 }
+

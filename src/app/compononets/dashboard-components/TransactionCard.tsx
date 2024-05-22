@@ -34,6 +34,10 @@ export default function TransactionCard(props: TransactionCardProps) {
         setIsModalOpen(false);
     };
 
+    if(!transaction){
+    return
+    }
+
     return (
         <>
             <motion.div
@@ -41,14 +45,14 @@ export default function TransactionCard(props: TransactionCardProps) {
                 ref={ref}
                 initial="hidden"
                 animate={control}
-                 onClick={handleOpenModal}
-                className={`bg-blue-400 m-5 bg-gradient-to-r from-blue-600 to-violet-600 rounded-md mx-auto p-5 w-[95%] lg:w-[60%] flex flex-col gap-5`}
+                onClick={handleOpenModal}
+                className={`bg-blue-400 m-5 bg-gradient-to-r from-blue-600 to-violet-600 rounded-md mx-auto p-5 w-[95%] lg:w-[70%] flex flex-col gap-5`}
             >
                 <div className="flex items-center gap-3">
                     <h1 className="text-md flex flex-col line-clamp-6">
                         <span>From</span>
                         <span className='md:hidden'>
-                            {`${transaction.from.slice(0, 6)}.....${transaction.from.slice(-4)}`}
+                            { transaction.from? `${transaction.from.slice(0, 6)}.....${transaction.from.slice(-4)}` : ""}
                         </span>
                         <span className='hidden md:inline-block'>
                             {transaction.from}
@@ -73,7 +77,7 @@ export default function TransactionCard(props: TransactionCardProps) {
                     <h1 className="text-md flex flex-col text-ellipsis">
                         <span>To</span>
                         <span className='md:hidden'>
-                            {`${transaction.to.slice(0, 6)}.....${transaction.from.slice(-4)}`}
+                            { transaction.to ? `${transaction.to.slice(0, 6)}.....${transaction.from.slice(-4)}` : ""}
                         </span>
                         <span className='hidden md:inline-block'>
                             {transaction.to}
