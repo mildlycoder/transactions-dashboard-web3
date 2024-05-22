@@ -1,16 +1,26 @@
+"use client"
+import { useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { motion, useAnimation } from 'framer-motion';
 import { ITransaction } from '@/types'
 interface TransactionCardProps {
     transaction: ITransaction;
 }
 
 export default function TransactionCard(props: TransactionCardProps) {
-
+const exampleVariant = {
+  visible: { opacity: 1 },
+  hidden: { opacity: 0 },
+}
     const { transaction } = props;
     return (
-        <div className="bg-blue-400 bg-gradient-to-r from-blue-600 to-violet-600 rounded-md mx-auto p-5 w-[95%] lg:w-[60%] flex flex-col gap-5">
+        <motion.div
+variants={exampleVariant}
+            initial={{ x: 0 }}
+            className="bg-blue-400 bg-gradient-to-r from-blue-600 to-violet-600 rounded-md mx-auto p-5 w-[95%] lg:w-[60%] flex flex-col gap-5">
             <div className="flex items-center gap-3">
                 <h1 className="text-md flex flex-col">
-                <span>From</span>
+                    <span>From</span>
                     {transaction.from}
                 </h1>
                 <div>
@@ -19,14 +29,14 @@ export default function TransactionCard(props: TransactionCardProps) {
                     </svg>
                 </div>
                 <h1 className="text-md flex flex-col">
-                <span>To</span>
+                    <span>To</span>
                     {transaction.to}
                 </h1>
             </div>
             <h1 className="text-xl flex flex-col">
                 value
-               <span className="text-3xl">{transaction.value}</span>
+                <span className="text-3xl">{transaction.value}</span>
             </h1>
-        </div>
+        </motion.div>
     );
 }
