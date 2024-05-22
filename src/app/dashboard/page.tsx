@@ -1,6 +1,5 @@
-import { ITransaction } from "@/types";
-import TransactionCard from "../compononets/dashboard-components/transactionCard";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { VirtualizedList } from "../compononets/dashboard-components/VirtualizedList";
 
 const getData = async () => {
     const apiKey = process.env.etherscanKey;
@@ -15,7 +14,6 @@ console.log(apiKey)
         + `&address=${addresses.join(',')}`
         + `&tag=latest`
         + `&page=1`
-        + `&offset=10`
         + `&sort=ascapikey=${apiKey}`;
     const res = await fetch(url, { cache: "no-store" })
     return res.json()
@@ -138,13 +136,7 @@ export default async function Dashboard() {
         <div className="flex flex-col bg-gradient-to-r from-slate-900 to-slate-700 min-h-screen">
             <h1 className="text-2xl m-5 p-5 text-white"> welcome to web3 tracker</h1>
             <div className="flex flex-col gap-5">
-                {
-                    (list) &&
-                    list.map((transaction: ITransaction) => {
-                        return <TransactionCard key={transaction.hash}
-                            transaction={transaction} />;
-                    })
-                }
+                <VirtualizedList list={list} />
             </div>
         </div>
     );
