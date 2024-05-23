@@ -1,10 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-import { VirtualizedList } from "../compononets/dashboard-components/VirtualizedList";
+import { VirtualizedListUp } from "@/app/compononets/dashboard-components/VirtualizedListUp";
+import { VirtualizedListDown } from "../compononets/dashboard-components/VirtualizedListDown";
 import { useUser } from "@clerk/nextjs";
+import { ITransaction } from "@/types";
 
 const getData = async (address: string) => {
-    const apiKey = process.env.NEXT_PUBLIC_ES_KEY
+    const apiKey = process.env.NEXT_PUBLIC_ES_KEY;
 
     if (!apiKey) {
         throw new Error("Etherscan API key is not defined");
@@ -16,6 +18,8 @@ const getData = async (address: string) => {
         + `&address=${address}`
         + `&startblock=0`
         + `&endblock=99999999`
+        + `&page=1`
+        + `&offset=15`
         + `&sort=asc`
         + `&apikey=${apiKey}`;
 
@@ -62,10 +66,20 @@ export default function Dashboard() {
         }
     }, [user]);
 
-    const handleButtonClick = (address: string | undefined) => {
-        if (address === undefined) return
+    const handleButtonClick = (address: string) => {
+        if (address === undefined) return;
         setSelectedAddress(address);
     };
+
+    const splitList = (list: ITransaction[]) => {
+        const third = Math.ceil(list.length / 3);
+        const firstPart = list.slice(0, third);
+        const secondPart = list.slice(third, third * 2);
+        const thirdPart = list.slice(third * 2);
+        return [firstPart, secondPart, thirdPart];
+    };
+
+    const [firstPart, secondPart, thirdPart] = splitList(list);
 
     return (
         <div className="flex flex-col bg-gradient-to-r from-slate-900 to-slate-700 min-h-screen">
@@ -91,11 +105,21 @@ export default function Dashboard() {
                     Default Address
                 </button>
             </div>
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-row gap-5">
                 {isLoading ? (
                     <div className="text-white p-5 m-5">Loading...</div>
                 ) : list.length > 0 ? (
-                    <VirtualizedList list={list} />
+                    <>
+                        <div className="flex-1">
+                            <VirtualizedListDown list={firstPart} />
+                        </div>
+                        <div className="flex-1">
+                            <VirtualizedListUp list={secondPart} />
+                        </div>
+                        <div className="flex-1">
+                            <VirtualizedListDown list={thirdPart} />
+                        </div>
+                    </>
                 ) : (
                     <div className="text-white p-5 m-5">No transactions were found for {selectedAddress}</div>
                 )}
