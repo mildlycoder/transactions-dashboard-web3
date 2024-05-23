@@ -110,13 +110,13 @@ export default function Dashboard() {
                     <div className="text-white p-5 m-5">Loading...</div>
                 ) : list.length > 0 ? (
                     <>
-                        <div className="md:flex-1 hidden">
+                        <div className="flex-1">
                             <VirtualizedListDown list={firstPart} />
                         </div>
                         <div className="flex-1">
                             <VirtualizedListUp list={secondPart} />
                         </div>
-                        <div className="md:flex-1 hidden">
+                        <div className="flex-1">
                             <VirtualizedListDown list={thirdPart} />
                         </div>
                     </>
