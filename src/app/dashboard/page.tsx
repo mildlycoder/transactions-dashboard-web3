@@ -69,7 +69,14 @@ export default function Dashboard() {
 
     return (
         <div className="flex flex-col bg-gradient-to-r from-slate-900 to-slate-700 min-h-screen">
-            <h1 className="text-2xl m-5 p-5 text-white">Welcome to Web3 Tracker</h1>
+            <h1 className="text-2xl m-5 p-5 text-white">Transactions for
+                <span className='md:hidden'>
+                    {selectedAddress ? `${selectedAddress.slice(0, 6)}.....${selectedAddress.slice(-4)}` : ""}
+                </span>
+                <span className='hidden md:inline-block'>
+                    {selectedAddress}
+                </span>
+            </h1>
             <div className="flex gap-5 m-5 p-5">
                 <button
                     onClick={() => handleButtonClick(user?.web3Wallets?.[0]?.web3Wallet)}
