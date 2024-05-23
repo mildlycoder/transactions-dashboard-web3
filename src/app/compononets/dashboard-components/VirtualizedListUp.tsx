@@ -18,7 +18,7 @@ export const VirtualizedListUp = (props: VirtualizedListProps) => {
     useEffect(() => {
         const animateScroll = async () => {
             await controls.start({
-                y: -150, transition: { duration: 5, ease: "linear" }
+                y: -300, transition: { duration: 5, ease: "linear" }
             });
 
             await controls.start({

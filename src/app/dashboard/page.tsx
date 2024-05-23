@@ -66,7 +66,7 @@ export default function Dashboard() {
         }
     }, [user]);
 
-    const handleButtonClick = (address: string) => {
+    const handleButtonClick = (address: string | undefined) => {
         if (address === undefined) return;
         setSelectedAddress(address);
     };

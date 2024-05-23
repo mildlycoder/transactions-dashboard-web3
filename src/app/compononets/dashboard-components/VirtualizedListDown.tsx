@@ -22,7 +22,7 @@ export const VirtualizedListDown = (props: VirtualizedListProps) => {
             });
 
             await controls.start({
-                y: 150,
+                y: 300,
                 transition: { duration: 5, ease: "linear" }
             });
 
